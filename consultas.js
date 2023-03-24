@@ -18,5 +18,26 @@ const grabarPosts = async (titulo, url, descripcion) => {
     await pool.query(consulta, values)
     console.log("post agregado")
 }
+const agregarLike = async (id) => {
+    const consulta = "Update posts set likes = likes + 1 where id = $1"
+    const values = [id]
+    const result = await pool.query(consulta, values)
+    const {rowCount} = result
+    if (rowCount == 0) {
+        throw { code: 404, message: 'Posts No Existe!'}
+    }
+    console.log("Like agregado")        
+}
+const eliminarPost = async (id) => {
+    const consulta = "Delete from posts where id = $1"
+    const values = [id]
+    const result = await pool.query(consulta, values)
+    console.log({result})
+    const {rowCount} = result
+    if (rowCount == 0) {
+        throw { code: 404, message: 'Posts No Existe!'}
+    }
+    console.log("Post eliminado")
+}
 
-module.exports = {leerPosts, grabarPosts}
+module.exports = {leerPosts, grabarPosts, agregarLike, eliminarPost}

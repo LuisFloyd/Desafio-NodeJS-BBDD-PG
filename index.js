@@ -1,4 +1,4 @@
-const {leerPosts, grabarPosts} = require ('./consultas')
+const {leerPosts, grabarPosts, agregarLike, eliminarPost} = require ('./consultas')
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -32,5 +32,27 @@ app.post('/posts', async (req, res)=>{
         res.send("posts agregado con éxito!")
     } catch (error) {
         console.log('Error al grabar datos!')        
+    }
+})
+
+app.put('/posts/like/:id', async (req, res)=>{
+    try {
+        const {id} = req.params
+        await agregarLike(id)
+        res.send("Like agregado con éxito!")
+    } catch (error) {
+        const {code, message} = error
+        res.status(code).send(message)
+    }
+})
+
+app.delete('/posts/:id', async (req, res)=>{
+    try {
+        const {id} = req.params
+        await eliminarPost(id)
+        res.send("Post eliminado con éxito!")
+    } catch (error) {
+        const {code, message} = error
+        res.status(code).send(message)
     }
 })
